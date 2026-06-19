@@ -24,16 +24,20 @@ An indoor response vehicle developed to navigate structural fire scenes, bypass 
 * **Friction Isolation via Bearing Seats:** To prevent rotating steel axle shafts from wearing down and melting raw 3D-printed plastic walls, I cut concentric $\varnothing16\text{mm} \times 2\text{mm}$ deep counterbores into the outside of the $\varnothing12\text{mm}$ axle holes. This design change allows flanged ball bearings to press-fit flush into the frame, isolating rotational friction completely.
 * **Targeting Stability:** Designed a top-deck recessed mounting slot to anchor a dual-servo pan-tilt gimbal tower. The water delivery tube terminates at a custom **venturi mist nozzle** aligned perfectly with the robot’s $Y=0\text{mm}$ centerline, neutralizing asymmetric fluid recoil during active pump discharging.
 
-#### 🧠 Control Loop Simulation & Electronics
-![ESP32 Firefighter Wiring Circuit Layout](circuit_layout.jpg)
-
-* **Embedded Logic:** Developed and verified the tracking firmware inside a Wokwi simulation environment using an **ESP32** microcontroller. The C++ control loop continually reads inputs from an HC-SR04 ultrasonic sensor, triggers an obstacle avoidance maneuver when tracking debris under $15\text{cm}$, and switches a 5V relay to activate a 12V priming pump once the pan-servo locks onto a threat coordinate.
-* **Tools:** `Autodesk Fusion` `Wokwi` `C++ (Arduino IDE)` `ESP32 Register PWM`
+#### 🧠 Control Loop Architecture & Calibration
+* **Embedded Logic:** Developed and verified the tracking firmware inside an emulated hardware loop using an **Arduino Uno** architecture. The C++ control loop continually reads inputs from three separate spatial vectors (`SENSOR_LEFT`, `SENSOR_CENTER`, `SENSOR_RIGHT`) using a custom NTC thermistor voltage divider matrix. Once local thermal radiation exceeds a calibrated ADC threshold (>750), the firmware overrides standard navigation parameters, stabilizes the top-deck nozzle servo gimbal, and switches a digital pin to drive a high-pressure pump relay for localized fire suppression.
+* **Tools:** `Autodesk Fusion` `Tinkercad Circuits` `C++ (Arduino IDE)` `Thermal Calibration Matrix`
 
 ---
 
 ### 🛸 2. AeroMed Heavy-Lift UAV
 An autonomous heavy-lift medical drone designed to transport $2\text{--}3\text{kg}$ supplies over urban traffic obstacles.
+
+#### 📐 Hexacopter Structural Airframe Configuration
+![AeroMed Hexacopter Chassis Assembly](chassis_render.jpg)
+
+#### 🧠 Real-Time Vision Tracking Loop
+![YOLOv8 Target Pad Tracking Telemetry](tracking_telemetry.jpg)
 
 * **Structural Optimization:** Designed a dual-plate regular hexagonal frame with a 240mm footprint using 3mm carbon fiber plates. Cut out weight-reduction pockets to reduce chassis plate mass by 20% while maintaining required bending stiffness. Distributed 6× hollow carbon fiber arms (20mm OD) at 60° angles to balance structural stress.
 * **Computer Vision Target Tracking:** Wrote an automated script inside Google Colab using OpenCV to compile a synthetic dataset. Trained a lightweight **YOLOv8 Nano** model at $320\times320$ resolution for real-time edge processing. Integrated a proportional tracking control script that translates target pixel errors into directional velocity vectors via **PyMAVLink** to command a Pixhawk autopilot during autonomous landings.
